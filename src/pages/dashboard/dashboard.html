@@ -1,0 +1,54 @@
+<!--
+  Generated template for the DashboardPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="danger">
+    <ion-title>Dashboard</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <h1 ion-text style="font-weight: bold">Hi there, Amy</h1>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-5>
+        <img class="circle-img" src="https://www.vitamix.com/media/recipe/rcpFourFruitSmoothie/images/500xNxFour_Fruit_Smoothie_0.jpg.pagespeed.ic.Sd3Jg3tTfj.jpg">
+      </ion-col>
+      <ion-col col-7 style="padding-top: 7%">
+        <h6 ion-text style="font-size: 1.5rem; margin-top: 0.5rem">Title: Store Manager</h6>
+        <h6 ion-text style="font-size: 1rem; margin-top: 0.5rem; font-weight: 400">Employee #: 7145768</h6>
+        <h6 ion-text style="font-size: 1rem; margin-top: 0.5rem; font-weight: 400">Last Login: 7:43 AM</h6>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <h4 ion-text style="font-weight: bold">Data Reporting</h4>
+  <h6 ion-text style="font-weight: 400">Data</h6>
+  <h6 ion-text style="font-weight: 400" (click)="gotoMaintenancePage()">Maintenance</h6>
+
+  <h4 ion-text style="font-weight: bold">Account Settings</h4>
+  <ion-list no-lines>
+    <ion-item>
+      <ion-icon name="ios-add-circle-outline" item-start></ion-icon>
+      Legal
+    </ion-item>
+    <ion-item>
+      <ion-icon name="ios-help-buoy-outline" item-start></ion-icon>
+      Support
+    </ion-item>
+    <div (click)="logout()">
+    <ion-item>
+      <ion-icon name="ios-power-outline" item-start></ion-icon>
+      Logout
+    </ion-item>
+    </div>
+  </ion-list>
+
+</ion-content>

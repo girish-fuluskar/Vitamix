@@ -1,0 +1,46 @@
+<!--
+  Generated template for the BlenderDetailPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Blender</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <img style="height: 45%;width: 100%;" src={{blenderDetail.image_url}}>
+  <h4 ion-text style="font-size: 1.7rem">{{blenderDetail.name}}</h4>
+  <div style="padding-left: 20px">
+    <h5 ion-text style="font-size: 1.5rem">Description</h5>
+    <!-- <h6 ion-text style="font-size: 1.2rem">{{blenderDetail.desc}}</h6> -->
+    <ion-row>
+      <ion-col col-12 *ngFor="let description of descriptions">
+        <h6 ion-text style="font-size: 1rem;">{{description}}</h6>
+      </ion-col>
+    </ion-row>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col col-4>
+          Category:
+          <br>
+          <h6 ion-text style="font-size: 1rem; margin-top: 0.5rem">{{blenderDetail.category}}</h6>
+        </ion-col>
+        <ion-col col-4>Status:
+          <br>
+          <h6 ion-text style="font-size: 1rem; margin-top: 0.5rem">{{blenderDetail.status}}</h6>
+        </ion-col>
+        <ion-col col-4>Price:
+          <br>
+          <h6 ion-text style="font-size: 1rem; margin-top: 0.5rem">{{blenderDetail.price}}</h6>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

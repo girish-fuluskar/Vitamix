@@ -1,0 +1,7 @@
+{
+  "name": "Vitamix",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

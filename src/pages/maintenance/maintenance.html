@@ -1,0 +1,19 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Maintenance</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <img style="height: 45%;width: 100%;" src="../../assets/imgs/mc.png">
+  <div *ngFor="let message of messages" (click)="gotoMessagePage(message)">
+    <h4 ion-text style="font-size: 1.7rem; margin-top: 2rem; font-weight: bold">Message from: {{message.name}}</h4>
+    <h4 ion-text style="font-weight: bold">ID:</h4>
+    <h6 ion-text style="font-size: 1rem; margin-top: 0.5rem; font-weight: 400">{{message.id}}</h6>
+    <h6 ion-text style="font-size: 1rem; margin-top: 0.5rem; font-weight: 400; padding-left: 1rem;">Created On:</h6>
+    <h6 ion-text style="font-size: 1rem; margin-top: -1rem; font-weight: 400; padding-left: 1rem;">{{message.createOn}}</h6>
+  </div>
+</ion-content>
