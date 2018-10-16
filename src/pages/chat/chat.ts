@@ -22,8 +22,11 @@ export class ChatPage {
   data = { message:'' };
   i:any;
 
-  greetings = ['hi','hello','hey'];
-  recipes = ['perfect summer smoothie', 'vitamix triple berry smoothie', 'vitamix green smoothie', 'mango delight smoothie', 'vitamix site'];
+  greetings = ['hi','hello','hey', 'hi, how are you', 'ask vitamix', 'open vitamix'];
+  recipes = ['can you show me soup recipes','gingered carrot orange soup', 'thai ginger soup with cashews','harvest cheddar soup', 'jackfruit soup', 'tortilla soup','can you show me smoothies recipes','how about recipes','what options do i have in recipes','what are the different recipe categories','perfect summer smoothie', 'vitamix triple berry smoothie', 'vitamix green smoothie', 'mango delight smoothie', 'vitamix site'];
+
+  
+
 
   isRecording = false;
   isPermission = false;
@@ -73,31 +76,9 @@ export class ChatPage {
             console.log("Speech Recog", chat);
             this.isRecording = true;
 
-            for(this.i = 0; this.i < this.greetings.length; this.i++){
-              console.log("Inside Loop");
-              if(this.greetings[this.i] === this.stringSimilarity.findBestMatch(this.greetings[this.i],chat).bestMatch.target){
-                console.log("Here", this.stringSimilarity.findBestMatch(this.greetings[this.i],chat).bestMatch.target);
-
-                var reply = this.stringSimilarity.findBestMatch(this.greetings[this.i],chat).bestMatch.target;
-          
-                //this.chats = chat;
-                //this.chats.push(reply);
-                this.sendMessage(reply);
-                this.cd.detectChanges();
-                break;
-
-              } else if(this.recipes[this.i] === this.stringSimilarity.findBestMatch(this.recipes[this.i],chat).bestMatch.target){
-                console.log("Here in else ", this.stringSimilarity.findBestMatch(this.recipes[this.i],chat).bestMatch.target);
-
-                var reply = this.stringSimilarity.findBestMatch(this.recipes[this.i],chat).bestMatch.target;
-          
-                //this.chats = chat;
-                //this.chats.push(reply);
-                this.sendMessage(reply);
-                this.cd.detectChanges();
-                break;
-              }   
-            }
+            this.sendMessage(chat[0].toLowerCase());
+            console.log("Chat value: " + chat[0].toLowerCase());
+            this.cd.detectChanges();
             this.stopListening();    
           });
           console.log('Granted');
@@ -107,9 +88,9 @@ export class ChatPage {
     })
 
     //Stop Listening after 5 seconds
-    let stopListening = setTimeout(() =>{
-      this.stopListening();
-    }, 5000);
+    // let stopListening = setTimeout(() =>{
+    //   this.stopListening();
+    // }, 5000);
   }
 
 
@@ -174,50 +155,106 @@ export class ChatPage {
 
   sendMessage(message){
     this.chats.push(message);
-    this.speak(message);
-    if(message === "hi"){
-      let hideFooterTimeout = setTimeout(()=>{
-        this.chats.push("Hello, I am VitaBot. Let's cook.");
-        this.speak("Hello, I am VitaBot. Let's cook.");
-      },3000);
-    } else if(message === "perfect summer smoothie"){
-      // this.playvideo("SrC3kHkHks8");
-      console.log("perfect summer smoothie");
-      this.speak("Playing " + message);
-      let hideFooterTimeout = setTimeout(() =>{
-        this.youtube.openVideo('SrC3kHkHks8');
-      }, 3000);
-    } else if(message === "vitamix triple berry smoothie"){
-      // this.playvideo("SrC3kHkHks8");
-      console.log("vitamix triple berry smoothie");
-      this.speak("Playing " + message);
-      let hideFooterTimeout = setTimeout(() =>{
-        this.youtube.openVideo('0mj1S4sczWw');
-      }, 3000);
-    } else if(message === "vitamix green smoothie"){
-      console.log("vitamix green smoothie");
-      this.speak("Playing " + message);
-      // this.playvideo("SrC3kHkHks8");
-      let hideFooterTimeout = setTimeout(() =>{
-        this.youtube.openVideo('K1dx4wtYxcE');
-      }, 3000);
-    } else if(message === "mango delight smoothie"){
+    //this.speak(message);
 
-      console.log("mango delight smoothie");
-      this.speak("Playing " + message);
-      // this.playvideo("SrC3kHkHks8");
-      let hideFooterTimeout = setTimeout(() =>{
-        this.youtube.openVideo('YA_LAWlyL84');
-      }, 3000);
-    } else if(message === "vitamix site"){
-      // this.playvideo("SrC3kHkHks8");
-      console.log("vitamix site");
-      this.speak("Playing " + message);
+    var nlpResult = this.stringSimilarity.findBestMatch(message, this.greetings.concat(this.recipes)).bestMatch.target;
+    var confidence = this.stringSimilarity.findBestMatch(message, this.greetings.concat(this.recipes)).bestMatch.rating;
+
+    console.log("Confidence: ", this.stringSimilarity.findBestMatch(message, this.greetings.concat(this.recipes)));
+    console.log("NLP Result: ", nlpResult);
+    
+    if(confidence < 0.1){
+      this.chats.push("Sorry, I did not understand you. Please say again.");
+        this.speak("Sorry, I did not understand you. Please say again.");
+        let hideFooterTimeout = setTimeout(() =>{
+          this.startListening();
+        }, 4000);
+        
+    } else {
+      if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "can you show me soup recipes"){
+        let hideFooterTimeout = setTimeout(()=>{
+          this.chats.push("Sure, let me check.");
+          let hideFooterTimeout = setTimeout(()=>{
+            this.speak("Sure, let me check.");
+          }, 1000);
+
+          let hideFooterTimeout1 = setTimeout(()=>{
+            this.chats.push("I found five soup recipes.");
+            this.speak("I found five soup recipes.");
+          }, 1000);
+          
+          
+          
+          this.chats.push("Gingered Carrot Orange Soup");
+          this.chats.push("Thai Ginger Soup with Cashews");
+          this.chats.push("Harvest Cheddar Soup");
+          this.chats.push("Jackfruit Soup");
+          this.chats.push("Tortilla Soup");
+          this.chats.push("Which one you like?");
+          this.speak("Which one you like?");
+        },3000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "gingered carrot orange soup"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("gingered carrot orange soup");
+        this.chats.push("Great! Here it is.")
+        this.speak("Great! Here it is. Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('ISFDcmr8S2Q');
+        }, 3000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && (nlpResult === "what options do i have in recipes" || nlpResult === "what are the different recipe categories")){
+        let hideFooterTimeout = setTimeout(()=>{
+          this.chats.push("I can help you explore recipes for Smoothies, Soupes, Frozen Desserts, Flours and Doughs, Dips and Spreads. Which of these are you interested in?");
+          this.speak("I can help you explore recipes for Smoothies, Soupes, Frozen Desserts, Flours and Doughs, Dips and Spreads. Which of these are you interested in?");
+        },3000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "how about recipes"){
+        let hideFooterTimeout = setTimeout(()=>{
+          this.chats.push("Humm..I can help you explore by category. \n or By usage situation. \n Which kind of exploration would you like me to help you with?");
+          this.speak("Humm..I can help you explore by category. \n or By usage situation. \n Which kind of exploration would you like me to help you with?");
+        },3000);
+      }else if(this.greetings.indexOf(nlpResult) > -1){
+        let hideFooterTimeout = setTimeout(()=>{
+          this.chats.push("Hello, I am Virtual Blending Assistant. How can I help you?");
+          this.speak("Hello, I am Virtual Blending Assistant. How can I help you?");
+        },3000);
+      } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "perfect summer smoothie"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("perfect summer smoothie");
+        this.speak("Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('SrC3kHkHks8');
+        }, 3000);
+      } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix triple berry smoothie"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("vitamix triple berry smoothie");
+        this.speak("Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('0mj1S4sczWw');
+        }, 3000);
+      } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix green smoothie"){
+        console.log("vitamix green smoothie");
+        this.speak("Playing " + nlpResult);
+        // this.playvideo("SrC3kHkHks8");
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('K1dx4wtYxcE');
+        }, 3000);
+      } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "mango delight smoothie"){
+
+        console.log("mango delight smoothie");
+        this.speak("Playing " + nlpResult);
+        // this.playvideo("SrC3kHkHks8");
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('YA_LAWlyL84');
+        }, 3000);
+      } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix site"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("vitamix site");
+        this.speak("Playing " + nlpResult);
 
 
-      let hideFooterTimeout = setTimeout(() =>{
-        this.youtube.openVideo('U-QAnbDUU00');
-      }, 3000);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('U-QAnbDUU00');
+        }, 2000);
+      }
     } 
     this.data.message = '';
   }
