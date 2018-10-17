@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, SystemJsNgModuleLoader } from '@angular/core';
+import { Content } from 'ionic-angular';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player';
 import { SpeechRecognition } from '@ionic-native/speech-recognition';
@@ -18,12 +19,13 @@ import { TextToSpeech } from '@ionic-native/text-to-speech';
   templateUrl: 'chat.html',
 })
 export class ChatPage {
+  @ViewChild(Content) content: Content;
   chats = [];
   data = { message:'' };
   i:any;
 
   greetings = ['hi','hello','hey', 'hi, how are you', 'ask vitamix', 'open vitamix'];
-  recipes = ['can you show me soup recipes','gingered carrot orange soup', 'thai ginger soup with cashews','harvest cheddar soup', 'jackfruit soup', 'tortilla soup','can you show me smoothies recipes','how about recipes','what options do i have in recipes','what are the different recipe categories','perfect summer smoothie', 'vitamix triple berry smoothie', 'vitamix green smoothie', 'mango delight smoothie', 'vitamix site'];
+  recipes = ['can you show me soup recipes','gingered carrot orange soup', 'thai ginger soup with cashews','harvest cheddar soup', 'jackfruit soup', 'tortilla soup','tomato soup','buckwheat black bean soup','can you show me smoothies recipes','how about recipes','what options do i have in recipes','what are the different recipe categories','perfect summer smoothie', 'vitamix triple berry smoothie', 'vitamix green smoothie', 'mango delight smoothie', 'vitamix site'];
 
   
 
@@ -154,7 +156,8 @@ export class ChatPage {
   }
 
   sendMessage(message){
-    this.chats.push(message);
+    //this.chats.push(message);
+    this.content.scrollToBottom();
     //this.speak(message);
 
     var nlpResult = this.stringSimilarity.findBestMatch(message, this.greetings.concat(this.recipes)).bestMatch.target;
@@ -165,78 +168,164 @@ export class ChatPage {
     
     if(confidence < 0.1){
       this.chats.push("Sorry, I did not understand you. Please say again.");
+      this.content.scrollToBottom();
         this.speak("Sorry, I did not understand you. Please say again.");
         let hideFooterTimeout = setTimeout(() =>{
           this.startListening();
-        }, 4000);
+        },2000);
         
     } else {
       if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "can you show me soup recipes"){
-        let hideFooterTimeout = setTimeout(()=>{
-          this.chats.push("Sure, let me check.");
-          let hideFooterTimeout = setTimeout(()=>{
-            this.speak("Sure, let me check.");
-          }, 1000);
-
-          let hideFooterTimeout1 = setTimeout(()=>{
-            this.chats.push("I found five soup recipes.");
-            this.speak("I found five soup recipes.");
-          }, 1000);
+        this.chats.push("Sure, let me check.");
+        this.speak("Sure, let me check.");
+        this.content.scrollToBottom();
+        
+        this.chats.push("I found five soup recipes.");
+        this.content.scrollToBottom();
+        this.speak("I found five soup recipes.");
+      
+        let menuTimeout = setTimeout(() =>{
+          this.chats.push("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup \n Which one you like?");
+          this.content.scrollToBottom();
+          this.speak("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup. Which one you like?");
+          //this.chats.push("Thai Ginger Soup with Cashews");
+          // this.chats.push("Harvest Cheddar Soup");
+          // this.chats.push("Jackfruit Soup");
+          // this.chats.push("Tortilla Soup");
+          // this.chats.push("Tomato Soup");
+          // this.chats.push("Buckwheat Black Bean Soup");
+          // this.chats.push("Which one you like?");
           
-          
-          
-          this.chats.push("Gingered Carrot Orange Soup");
-          this.chats.push("Thai Ginger Soup with Cashews");
-          this.chats.push("Harvest Cheddar Soup");
-          this.chats.push("Jackfruit Soup");
-          this.chats.push("Tortilla Soup");
-          this.chats.push("Which one you like?");
-          this.speak("Which one you like?");
-        },3000);
+          //this.speak("Which one you like?");
+        }, 1000);
+        
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },12000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "gingered carrot orange soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("gingered carrot orange soup");
-        this.chats.push("Great! Here it is.")
+        this.chats.push("Great! Here it is.");
+        this.content.scrollToBottom();
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
-          this.youtube.openVideo('ISFDcmr8S2Q');
-        }, 3000);
+          this.youtube.openVideo('lSFDcmr8S2Q');
+        }, 1000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "thai ginger soup with cashews"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("thai ginger soup with cashews");
+        this.chats.push("Great! Here it is.");
+        this.content.scrollToBottom();
+        this.speak("Great! Here it is. Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('B_w59q2hdjI');
+        },1000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "harvest cheddar soup"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("harvest cheddar soup");
+        this.chats.push("Great! Here it is.");
+        this.content.scrollToBottom();
+        this.speak("Great! Here it is. Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.speak("Sorry! No video available for " + nlpResult);
+        },1000);
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },6000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "jackfruit soup"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("Jackfruit Soup");
+        this.chats.push("Great! Here it is.");
+        this.content.scrollToBottom();
+        this.speak("Great! Here it is. Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.speak("Sorry! No video available for " + nlpResult);
+        },1000);
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },6000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "tortilla soup"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("Tortilla Soup");
+        this.chats.push("Great! Here it is.");
+        this.content.scrollToBottom();
+        this.speak("Great! Here it is. Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.youtube.openVideo('T8rh3dR2xyc');
+        },1000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "tomato soup"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("Tomato Soup");
+        this.chats.push("Great! Here it is.");
+        this.content.scrollToBottom();
+        this.speak("Great! Here it is. Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.speak("Sorry! No video available for " + nlpResult);
+        },1000);
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },6000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "buckwheat black bean soup"){
+        // this.playvideo("SrC3kHkHks8");
+        console.log("Buckwheat Black Bean Soup");
+        this.chats.push("Great! Here it is.");
+        this.content.scrollToBottom();
+        this.speak("Great! Here it is. Playing " + nlpResult);
+        let hideFooterTimeout = setTimeout(() =>{
+          this.speak("Sorry! No video available for " + nlpResult);
+        },1000);
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },6000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && (nlpResult === "what options do i have in recipes" || nlpResult === "what are the different recipe categories")){
         let hideFooterTimeout = setTimeout(()=>{
-          this.chats.push("I can help you explore recipes for Smoothies, Soupes, Frozen Desserts, Flours and Doughs, Dips and Spreads. Which of these are you interested in?");
+          this.chats.push("I can help you explore recipes for \n Smoothies \n Soupes \n Frozen Desserts \n Flours and Doughs \n Dips and Spreads. \n Which of these are you interested in?");
+          this.content.scrollToBottom();
           this.speak("I can help you explore recipes for Smoothies, Soupes, Frozen Desserts, Flours and Doughs, Dips and Spreads. Which of these are you interested in?");
-        },3000);
+        },1000);
+        this.content.scrollToBottom();
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },10000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "how about recipes"){
         let hideFooterTimeout = setTimeout(()=>{
-          this.chats.push("Humm..I can help you explore by category. \n or By usage situation. \n Which kind of exploration would you like me to help you with?");
-          this.speak("Humm..I can help you explore by category. \n or By usage situation. \n Which kind of exploration would you like me to help you with?");
-        },3000);
+          this.chats.push("Sure. I can help you explore by category. \n or By usage situation. Which kind of exploration would you like me to help you with?");
+          this.content.scrollToBottom();
+          this.speak("Sure. I can help you explore by category. \n or By usage situation. \n Which kind of exploration would you like me to help you with?");
+        },1000);
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },10000);
       }else if(this.greetings.indexOf(nlpResult) > -1){
         let hideFooterTimeout = setTimeout(()=>{
           this.chats.push("Hello, I am Virtual Blending Assistant. How can I help you?");
+          this.content.scrollToBottom();
           this.speak("Hello, I am Virtual Blending Assistant. How can I help you?");
-        },3000);
+        },1000);
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },6000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "perfect summer smoothie"){
         // this.playvideo("SrC3kHkHks8");
         console.log("perfect summer smoothie");
         this.speak("Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('SrC3kHkHks8');
-        }, 3000);
+        },1000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix triple berry smoothie"){
         // this.playvideo("SrC3kHkHks8");
         console.log("vitamix triple berry smoothie");
         this.speak("Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('0mj1S4sczWw');
-        }, 3000);
+        },1000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix green smoothie"){
         console.log("vitamix green smoothie");
         this.speak("Playing " + nlpResult);
         // this.playvideo("SrC3kHkHks8");
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('K1dx4wtYxcE');
-        }, 3000);
+        },1000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "mango delight smoothie"){
 
         console.log("mango delight smoothie");
@@ -244,17 +333,23 @@ export class ChatPage {
         // this.playvideo("SrC3kHkHks8");
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('YA_LAWlyL84');
-        }, 3000);
+        },1000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix site"){
         // this.playvideo("SrC3kHkHks8");
         console.log("vitamix site");
         this.speak("Playing " + nlpResult);
-
-
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('U-QAnbDUU00');
-        }, 2000);
-      }
+        },1000);
+      } else {
+        this.chats.push("Sorry, I did not understand you. Please say again.");
+        this.content.scrollToBottom();
+          this.speak("Sorry, I did not understand you. Please say again.");
+          let hideFooterTimeout = setTimeout(() =>{
+            this.startListening();
+          },2000);
+          
+      } 
     } 
     this.data.message = '';
   }
