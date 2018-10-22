@@ -27,6 +27,12 @@
       <img src="../../assets/imgs/icon.png" alt="Avatar" style="width:50%;">
       <span text-right text-wrap>{{chat}}</span>
     </div>
+
+    <div text-right class="container-menu" *ngIf="menu?.length > 0">
+      <!-- <img src="../../assets/imgs/icon.png" alt="Avatar" style="width:50%;"> -->
+      <span text-right text-wrap *ngFor="let menu of menu">{{menu}}<br/><br/></span>
+
+    </div>
 </ion-content>
 
 <ion-footer>

@@ -5,6 +5,7 @@ import { YoutubeVideoPlayer } from '@ionic-native/youtube-video-player';
 import { SpeechRecognition } from '@ionic-native/speech-recognition';
 import { ChangeDetectorRef } from '@angular/core';
 import { TextToSpeech } from '@ionic-native/text-to-speech';
+import { timingSafeEqual } from 'crypto';
 
 /**
  * Generated class for the ChatPage page.
@@ -21,11 +22,17 @@ import { TextToSpeech } from '@ionic-native/text-to-speech';
 export class ChatPage {
   @ViewChild(Content) content: Content;
   chats = [];
+  menu = [];
   data = { message:'' };
   i:any;
 
   greetings = ['hi','hello','hey', 'hi, how are you', 'ask vitamix', 'open vitamix'];
-  recipes = ['can you show me soup recipes','gingered carrot orange soup', 'thai ginger soup with cashews','harvest cheddar soup', 'jackfruit soup', 'tortilla soup','tomato soup','buckwheat black bean soup','can you show me smoothies recipes','how about recipes','what options do i have in recipes','what are the different recipe categories','perfect summer smoothie', 'vitamix triple berry smoothie', 'vitamix green smoothie', 'mango delight smoothie', 'vitamix site'];
+  recipes = ['can you show me soup recipes','can you show me smoothie recipes','gingered carrot orange soup', 'thai ginger soup with cashews',
+  'harvest cheddar soup', 'jackfruit soup', 'tortilla soup','tomato soup','buckwheat black bean soup',
+  'can you show me smoothies recipes','how about recipes','what options do i have in recipes',
+  'what are the different recipe categories','perfect summer smoothie', 'vitamix triple berry smoothie', 
+  'vitamix green smoothie', 'mango delight smoothie', 'vitamix site', 'perfect summer smoothie', 
+  'vitamix triple berry smoothie', 'vitamix green smoothie', 'mango delight smoothie'];
 
   
 
@@ -35,8 +42,9 @@ export class ChatPage {
   
   stringSimilarity = require('string-similarity');
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private youtube: YoutubeVideoPlayer, private speechRecognition: SpeechRecognition, private plt: Platform, private cd: ChangeDetectorRef, private tts: TextToSpeech) {
-    
+  constructor(public navCtrl: NavController, public navParams: NavParams, private youtube: YoutubeVideoPlayer, 
+    private speechRecognition: SpeechRecognition, private plt: Platform, private cd: ChangeDetectorRef, 
+    private tts: TextToSpeech) {
   }
 
   isIos() {
@@ -180,14 +188,24 @@ export class ChatPage {
         this.speak("Sure, let me check.");
         this.content.scrollToBottom();
         
-        this.chats.push("I found five soup recipes.");
+        this.chats.push("I found seven soup recipes. Which one you like?");
         this.content.scrollToBottom();
-        this.speak("I found five soup recipes.");
+        this.speak("I found seven soup recipes. Which one you like?");
       
         let menuTimeout = setTimeout(() =>{
-          this.chats.push("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup \n Which one you like?");
+          //this.chats.push("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup \n Which one you like?");
+          this.menu = [];
+          this.menu.push("Gingered Carrot Orange Soup"); 
+          this.menu.push("Thai Ginger Soup with Cashews");
+          this.menu.push("Harvest Cheddar Soup");
+          this.menu.push("Jackfruit Soup");
+          this.menu.push("Tortilla Soup");
+          this.menu.push("Tomato Soup");
+          this.menu.push("Buckwheat Black Bean Soup");
+
           this.content.scrollToBottom();
-          this.speak("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup. Which one you like?");
+          this.content.scrollToBottom();
+          //this.speak("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup. Which one you like?");
           //this.chats.push("Thai Ginger Soup with Cashews");
           // this.chats.push("Harvest Cheddar Soup");
           // this.chats.push("Jackfruit Soup");
@@ -197,11 +215,11 @@ export class ChatPage {
           // this.chats.push("Which one you like?");
           
           //this.speak("Which one you like?");
-        }, 1000);
+        }, 2000);
         
         let speakTimeout = setTimeout(() =>{
           this.startListening();
-        },12000);
+        },15000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "gingered carrot orange soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("gingered carrot orange soup");
@@ -279,7 +297,16 @@ export class ChatPage {
         },6000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && (nlpResult === "what options do i have in recipes" || nlpResult === "what are the different recipe categories")){
         let hideFooterTimeout = setTimeout(()=>{
-          this.chats.push("I can help you explore recipes for \n Smoothies \n Soupes \n Frozen Desserts \n Flours and Doughs \n Dips and Spreads. \n Which of these are you interested in?");
+          //this.chats.push("I can help you explore recipes for \n Smoothies, \n Soupes, \n Frozen Desserts, \n Flours and Doughs, \n Dips and Spreads. \n Which of these are you interested in?");
+          this.menu = [];
+          this.menu.push("I can help you explore recipes for");
+          this.menu.push("Smoothies");
+          this.menu.push("Soupes");
+          this.menu.push("Frozen Desserts");
+          this.menu.push("Flours and Doughs");
+          this.menu.push("Dips and Spreads");
+          this.menu.push("Which of these are you interested in?");
+          this.content.scrollToBottom();
           this.content.scrollToBottom();
           this.speak("I can help you explore recipes for Smoothies, Soupes, Frozen Desserts, Flours and Doughs, Dips and Spreads. Which of these are you interested in?");
         },1000);
@@ -305,7 +332,31 @@ export class ChatPage {
         let speakTimeout = setTimeout(() =>{
           this.startListening();
         },6000);
-      } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "perfect summer smoothie"){
+      } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "can you show me smoothie recipes"){
+        this.chats.push("Sure, let me check.");
+        this.speak("Sure, let me check.");
+        this.content.scrollToBottom();
+        
+        this.chats.push("I found four smoothie recipes. Which one you like?");
+        this.content.scrollToBottom();
+        this.speak("I found four smoothie recipes. Which one you like?");
+      
+        let menuTimeout = setTimeout(() =>{
+          //this.chats.push("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup \n Which one you like?");
+          this.menu = [];
+          this.menu.push("Perfect Summer Smoothie"); 
+          this.menu.push("Vitamix Triple Berry Smoothie");
+          this.menu.push("Vitamix Green Smoothie");
+          this.menu.push("Mango Delight Smoothie");
+
+          this.content.scrollToBottom();
+          this.content.scrollToBottom();
+        }, 2000);
+        
+        let speakTimeout = setTimeout(() =>{
+          this.startListening();
+        },15000);
+      }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "perfect summer smoothie"){
         // this.playvideo("SrC3kHkHks8");
         console.log("perfect summer smoothie");
         this.speak("Playing " + nlpResult);
