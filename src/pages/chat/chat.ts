@@ -69,10 +69,16 @@ export class ChatPage {
     });
   }
 
-  speak(text){
-    this.tts.speak(text)
-  .then(() => console.log('Success'))
-  .catch((reason: any) => console.log(reason));
+  speak(speakText){
+    if(this.plt.is('ios')){
+        this.tts.speak({text:speakText,locale:'en-US',rate: 1.55})
+          .then(() => console.log('Success'))
+          .catch((reason: any) => console.log(reason));
+    } else {
+        this.tts.speak({text:speakText,locale:'en-US',rate: 1})
+          .then(() => console.log('Success'))
+          .catch((reason: any) => console.log(reason));
+    }
   }
 
   startListening() {
@@ -180,29 +186,33 @@ export class ChatPage {
         this.speak("Sorry, I did not understand you. Please say again.");
         let hideFooterTimeout = setTimeout(() =>{
           this.startListening();
-        },2000);
+        },4000);
+
+        if(this.plt.is('ios')){
+          let hideFooterTimeout = setTimeout(() =>{
+            this.stopListening();
+          },4000);
+        }
         
     } else {
       if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "can you show me soup recipes"){
-        this.chats.push("Sure, let me check.");
-        this.speak("Sure, let me check.");
+        //this.chats.push("Sure, let me check.");
+        //this.speak("Sure, let me check.");
         this.content.scrollToBottom();
         
-        this.chats.push("I found seven soup recipes. Which one you like?");
+        this.chats.push("Sure, let me check.");
         this.content.scrollToBottom();
-        this.speak("I found seven soup recipes. Which one you like?");
+        this.speak("Sure, let me check. I found seven soup recipes. Which one you like?");
       
         let menuTimeout = setTimeout(() =>{
           //this.chats.push("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup \n Which one you like?");
           this.menu = [];
-          this.menu.push("Gingered Carrot Orange Soup"); 
-          this.menu.push("Thai Ginger Soup with Cashews");
-          this.menu.push("Harvest Cheddar Soup");
-          this.menu.push("Jackfruit Soup");
-          this.menu.push("Tortilla Soup");
-          this.menu.push("Tomato Soup");
-          this.menu.push("Buckwheat Black Bean Soup");
+          this.menu.push("I found seven soup recipes. Which one you like? <br> &#8226; Gingered Carrot Orange Soup<br>&#8226; Thai Ginger Soup with Cashews<br>&#8226; Harvest Cheddar Soup<br>&#8226; Jackfruit Soup<br>&#8226; Tortilla Soup<br>&#8226; Tomato Soup<br>&#8226; Buckwheat Black Bean Soup"); 
+          
 
+          this.chats.push(this.menu);
+
+          this.content.scrollToBottom();
           this.content.scrollToBottom();
           this.content.scrollToBottom();
           //this.speak("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup. Which one you like?");
@@ -215,11 +225,18 @@ export class ChatPage {
           // this.chats.push("Which one you like?");
           
           //this.speak("Which one you like?");
-        }, 2000);
-        
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },15000);
+        }, 4000);
+        this.content.scrollToBottom();
+
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else {
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },15000);
+        }
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "gingered carrot orange soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("gingered carrot orange soup");
@@ -228,7 +245,7 @@ export class ChatPage {
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('lSFDcmr8S2Q');
-        }, 1000);
+        }, 2000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "thai ginger soup with cashews"){
         // this.playvideo("SrC3kHkHks8");
         console.log("thai ginger soup with cashews");
@@ -237,7 +254,7 @@ export class ChatPage {
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('B_w59q2hdjI');
-        },1000);
+        },2000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "harvest cheddar soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("harvest cheddar soup");
@@ -246,10 +263,17 @@ export class ChatPage {
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.speak("Sorry! No video available for " + nlpResult);
-        },1000);
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },6000);
+        },2000);
+
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else {
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },7000);
+        }
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "jackfruit soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("Jackfruit Soup");
@@ -258,10 +282,17 @@ export class ChatPage {
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.speak("Sorry! No video available for " + nlpResult);
-        },1000);
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },6000);
+        },2000);
+
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else {
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },7000);
+        }
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "tortilla soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("Tortilla Soup");
@@ -270,7 +301,7 @@ export class ChatPage {
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('T8rh3dR2xyc');
-        },1000);
+        },2000);
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "tomato soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("Tomato Soup");
@@ -279,10 +310,17 @@ export class ChatPage {
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.speak("Sorry! No video available for " + nlpResult);
-        },1000);
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },6000);
+        },2000);
+
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else {
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },7000);
+        }
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "buckwheat black bean soup"){
         // this.playvideo("SrC3kHkHks8");
         console.log("Buckwheat Black Bean Soup");
@@ -291,47 +329,77 @@ export class ChatPage {
         this.speak("Great! Here it is. Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.speak("Sorry! No video available for " + nlpResult);
-        },1000);
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },6000);
+        },2000);
+
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else {
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },7000);
+        }
       }else if(this.recipes.indexOf(nlpResult) > -1 && (nlpResult === "what options do i have in recipes" || nlpResult === "what are the different recipe categories")){
         let hideFooterTimeout = setTimeout(()=>{
           //this.chats.push("I can help you explore recipes for \n Smoothies, \n Soupes, \n Frozen Desserts, \n Flours and Doughs, \n Dips and Spreads. \n Which of these are you interested in?");
           this.menu = [];
-          this.menu.push("I can help you explore recipes for");
-          this.menu.push("Smoothies");
-          this.menu.push("Soupes");
-          this.menu.push("Frozen Desserts");
-          this.menu.push("Flours and Doughs");
-          this.menu.push("Dips and Spreads");
-          this.menu.push("Which of these are you interested in?");
+
+          this.menu.push("I can help you explore recipes for<br>&#8226; Smoothies<br>&#8226; Soupes<br>&#8226; Frozen Desserts<br>&#8226; Flours and Doughs<br>&#8226; Dips and Spreads<br>Which of these are you interested in?");
+
+
+          this.chats.push(this.menu);
+
           this.content.scrollToBottom();
           this.content.scrollToBottom();
           this.speak("I can help you explore recipes for Smoothies, Soupes, Frozen Desserts, Flours and Doughs, Dips and Spreads. Which of these are you interested in?");
-        },1000);
+        },2000);
         this.content.scrollToBottom();
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },10000);
+
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else{
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },11000);
+        }
+
+        
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "how about recipes"){
         let hideFooterTimeout = setTimeout(()=>{
           this.chats.push("Sure. I can help you explore by category. \n or By usage situation. Which kind of exploration would you like me to help you with?");
           this.content.scrollToBottom();
           this.speak("Sure. I can help you explore by category. \n or By usage situation. \n Which kind of exploration would you like me to help you with?");
-        },1000);
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },10000);
+        },2000);
+
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening;
+          },1000);  
+        } else{
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },11000);
+        }
       }else if(this.greetings.indexOf(nlpResult) > -1){
         let hideFooterTimeout = setTimeout(()=>{
           this.chats.push("Hello, I am Virtual Blending Assistant. How can I help you?");
           this.content.scrollToBottom();
           this.speak("Hello, I am Virtual Blending Assistant. How can I help you?");
-        },1000);
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },6000);
+        },2000);
+        
+        
+        if(this.plt.is('ios')){
+          let hideFooterTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else {
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },7000);
+        }
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "can you show me smoothie recipes"){
         this.chats.push("Sure, let me check.");
         this.speak("Sure, let me check.");
@@ -344,39 +412,44 @@ export class ChatPage {
         let menuTimeout = setTimeout(() =>{
           //this.chats.push("Gingered Carrot Orange Soup, \n Thai Ginger Soup with Cashews, \n Harvest Cheddar Soup, \n Jackfruit Soup, \n Tortilla Soup, \n Tomato Soup, \n and Buckwheat Black Bean Soup \n Which one you like?");
           this.menu = [];
-          this.menu.push("Perfect Summer Smoothie"); 
-          this.menu.push("Vitamix Triple Berry Smoothie");
-          this.menu.push("Vitamix Green Smoothie");
-          this.menu.push("Mango Delight Smoothie");
+          this.menu.push("&#8226;Perfect Summer Smoothie<br>&#8226;Vitamix Triple Berry Smoothie<br>&#8226;Vitamix Green Smoothie<br>&#8226;Mango Delight Smoothie"); 
+          
+          this.chats.push(this.menu);
 
           this.content.scrollToBottom();
           this.content.scrollToBottom();
-        }, 2000);
+        }, 3000);
         
-        let speakTimeout = setTimeout(() =>{
-          this.startListening();
-        },15000);
+        if(this.plt.is('ios')){
+          let speakTimeout = setTimeout(() =>{
+            this.stopListening();
+          },1000);
+        } else {
+          let speakTimeout = setTimeout(() =>{
+            this.startListening();
+          },15000);
+        }
       }else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "perfect summer smoothie"){
         // this.playvideo("SrC3kHkHks8");
         console.log("perfect summer smoothie");
         this.speak("Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('SrC3kHkHks8');
-        },1000);
+        },2000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix triple berry smoothie"){
         // this.playvideo("SrC3kHkHks8");
         console.log("vitamix triple berry smoothie");
         this.speak("Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('0mj1S4sczWw');
-        },1000);
+        },2000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix green smoothie"){
         console.log("vitamix green smoothie");
         this.speak("Playing " + nlpResult);
         // this.playvideo("SrC3kHkHks8");
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('K1dx4wtYxcE');
-        },1000);
+        },2000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "mango delight smoothie"){
 
         console.log("mango delight smoothie");
@@ -384,21 +457,28 @@ export class ChatPage {
         // this.playvideo("SrC3kHkHks8");
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('YA_LAWlyL84');
-        },1000);
+        },2000);
       } else if(this.recipes.indexOf(nlpResult) > -1 && nlpResult === "vitamix site"){
         // this.playvideo("SrC3kHkHks8");
         console.log("vitamix site");
         this.speak("Playing " + nlpResult);
         let hideFooterTimeout = setTimeout(() =>{
           this.youtube.openVideo('U-QAnbDUU00');
-        },1000);
+        },2000);
       } else {
         this.chats.push("Sorry, I did not understand you. Please say again.");
         this.content.scrollToBottom();
           this.speak("Sorry, I did not understand you. Please say again.");
-          let hideFooterTimeout = setTimeout(() =>{
-            this.startListening();
-          },2000);
+          
+          if(this.plt.is('ios')){
+            let speakTimeout = setTimeout(() =>{
+              this.stopListening();
+            },1000);
+          } else {
+            let hideFooterTimeout = setTimeout(() =>{
+              this.startListening();
+            },4000);
+          }
           
       } 
     } 

@@ -1,0 +1,10 @@
+{
+    "Security.framework": 1,
+    "SystemConfiguration.framework": 1,
+    "WebKit.framework": 1,
+    "libz.tbd": 1,
+    "Speech.framework": 1,
+    "MediaPlayer.framework": 1,
+    "AVFoundation.framework": 1,
+    "JavaScriptCore.framework": 1
+}
